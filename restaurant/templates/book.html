@@ -8,9 +8,36 @@
       <div class="column">
         {% csrf_token %}
         <form method="POST" id="form">
-          {% csrf_token %}
-          {{form.as_p}}
-          <button type="submit" id="button">Reserve</button>
+          <!-- {% csrf_token %} -->
+          <p>
+            <label for="first_name">Name:</label>
+            <input
+              type="text"
+              placeholder="Your Name"
+              maxlength="200"
+              required=""
+              id="first_name"
+            />
+          </p>
+          <p>
+            <!-- Step 9: Part one -->
+            <label for="reservation_date">Date:</label>
+            <input
+              type="text"
+              placeholder="Reservation date"
+              maxlength="200"
+              required=""
+              id="reservation_date"
+            />
+          </p>
+
+          <p>
+            <label for="reservation_slot">Reservation time:</label>
+            <select id="reservation_slot">
+              <option value="0" disabled>Select time</option>
+            </select>
+          </p>
+          <button type="button" id="button">Reserve</button>
         </form>
       </div>
       <!--End col-->
@@ -30,15 +57,9 @@
   document.getElementById("reservation_date").value = `${date.getFullYear()}-${
     date.getMonth() + 1
   }-${date.getDate().toString().padStart(2, "0")}`;
-  const day = new Date().toLocaleString("en-US", { day: "2-digit" });
-  const month = new Date().toLocaleString("en-US", { month: "2-digit" });
-  const year = new Date().getFullYear();
-  document.getElementById("reservation_date").value = `${year}-${month}-${day}`;
 
-  console.log(
-    "Reservation Date: ",
-    document.getElementById("reservation_date").value
-  );
+  console.log(document.getElementById("reservation_date").value);
+  getBookings();
 
   /*  Step 10: Part two */
   document
@@ -56,24 +77,17 @@
         reserved_slots = [];
         bookings = "";
 
-        console.log("Data Length: ", data.length);
-        console.log("Get Bookings: ", data[0].fields.reservation_slot);
-        for (item of data) {
-          console.log(item.fields);
-        }
-        console.log("Loop End");
         /* Step 11: Part three */
-        for (item of data) {
-          // console.log(item);
-          // console.log(item.fields);
-          reserved_slots.push(item.fields.reservation_slot);
+        for (let item of data) {
+          console.log(item);
+          reserved_slots.push(item.fields.reservations_slot);
           bookings += `<p>${item.fields.first_name} - ${formatTime(
             item.fields.reservation_slot
           )}</p>`;
         }
+
         /* Step 12: Part four  */
-        slot_options = '<option value="0" disabled>Select time</option>';
-        console.log("Slots: ", reservation_slot);
+        slot_options = `<option value="0" disabled>Select time</option>`;
         for (let i = 11; i < 20; i++) {
           const label = formatTime(i);
           if (reserved_slots.includes(i)) {
