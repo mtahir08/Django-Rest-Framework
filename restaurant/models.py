@@ -1,10 +1,10 @@
 from django.db import models
-
+from datetime import datetime
 
 # Create your models here.
 class Booking(models.Model):
     first_name = models.CharField(max_length=200)
-    reservation_date = models.DateField()
+    reservation_date = models.DateField(default=datetime.today().date())
     reservation_slot = models.SmallIntegerField(default=10)
 
     def __str__(self): 
